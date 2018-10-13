@@ -1,6 +1,5 @@
 const getSurroundingTiles = (tile, boardWidth) => {
-  // need to check if at edge of row
-  if (tile % 30 == 0) {
+  if (tile % boardWidth == 0) {
     return [
       tile - boardWidth,
       tile - (boardWidth - 1),
@@ -8,7 +7,7 @@ const getSurroundingTiles = (tile, boardWidth) => {
       tile + boardWidth,
       tile + (boardWidth + 1)
     ];
-  } else if ((tile + 1) % 30 == 0) {
+  } else if ((tile + 1) % boardWidth == 0) {
     return [
       tile - (boardWidth + 1),
       tile - boardWidth,
