@@ -1,16 +1,19 @@
 /* eslint-disable */
+
 import addMine from "../utils/add-mine";
+import createBoard from "../utils/create-board";
 import getRandomInt from "../utils/random-number";
 import getSurroundingTiles from "../utils/get-surrounding-tiles";
+import initialiseBoard from "../utils/initialise-board";
 import markTile from "../utils/mark-tile";
 
-describe("Testing addMine()", () => {
-  const board = [];
-  for (let i = 0; i < 100; i++) {
-    board.push({ value: 0, displayed: false, marked: false });
-  }
-  const tileId = 0;
+const board = [];
+for (let i = 0; i < 100; i++) {
+  board.push({ value: 0, displayed: false, marked: false });
+}
 
+describe("Testing addMine()", () => {
+  const tileId = 0;
   test("addMine() should return array", () => {
     expect(addMine(board, tileId)).toBeInstanceOf(Array);
   });
@@ -57,19 +60,16 @@ describe("Testing getRandomInt()", () => {
 describe("Testing getSurroundingTiles()", () => {
   const tileId = 11;
   const boardWidth = 10;
-
   test("getSurroundingTiles() should return array", () => {
     expect(getSurroundingTiles(tileId, boardWidth)).toBeInstanceOf(Array);
   });
   test("getSurroundingTiles() should return populated array", () => {
     expect(getSurroundingTiles(tileId, boardWidth).length).toBeGreaterThan(0);
   });
-
   const surroundingTiles = [0, 1, 2, 10, 12, 20, 21, 22];
   test("getSurroundingTiles() should return correctly populated array given non-edge tile", () => {
     expect(getSurroundingTiles(tileId, boardWidth)).toEqual(surroundingTiles);
   });
-
   const leftEdgeTileId = 10;
   const surroundingTilesLeftEdge = [0, 1, 11, 20, 21];
   test("getSurroundingTiles() should return correctly populated array given left-edge tile", () => {
@@ -77,7 +77,6 @@ describe("Testing getSurroundingTiles()", () => {
       surroundingTilesLeftEdge
     );
   });
-
   const rightEdgeTileId = 19;
   const surroundingTileRightEdge = [8, 9, 18, 28, 29];
   test("getSurroundingTiles() should return correctly populated array given right-edge tile", () => {
@@ -87,15 +86,30 @@ describe("Testing getSurroundingTiles()", () => {
   });
 });
 
+describe("Testing initialiseBoard()", () => {
+  const width = 10;
+  const height = 10;
+  const mines = 12;
+  test("initialiseBoard() should return array of correct length", () => {
+    expect(initialiseBoard(board, width, height, mines)).toBeInstanceOf(Array);
+    expect(initialiseBoard(board, width, height, mines).length).toBe(
+      width * height
+    );
+  });
+  test("initialiseBoard() should return array with correct number of mines", () => {
+    expect(
+      initialiseBoard(board, width, height, mines).reduce((mineCount, tile) => {
+        if (tile.value == "M") return (mineCount += 1);
+        else return mineCount;
+      }, 0)
+    ).toBe(mines);
+  });
+  // modularise initialiseBoard further so can test altering value of surrounding tiles
+});
+
 describe("Testing markTile()", () => {
   const tileId = 0;
-  const prevState = {
-    board: []
-  };
-  for (let i = 0; i < 100; i++) {
-    prevState.board.push({ value: 0, displayed: false, marked: false });
-  }
-
+  const prevState = { board };
   test("markTile() should return object", () => {
     expect(markTile(tileId, prevState)).toBeInstanceOf(Object);
   });
@@ -108,13 +122,11 @@ describe("Testing markTile()", () => {
       prevState.board[tileId].marked
     );
   });
-
   test("markTile() should return board with correct tile marked", () => {
     expect(markTile(tileId, prevState).board[tileId].marked).toBeTruthy();
     expect(markTile(tileId, prevState).board[tileId].value).toBe(0);
     expect(markTile(tileId, prevState).board[tileId].displayed).toBeFalsy();
   });
-
   test("markTile() should not change marked property any other tiles", () => {
     for (let i = 1; i < 100; i++) {
       expect(markTile(tileId, prevState).board[i].marked).toBe(
