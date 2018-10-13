@@ -1,6 +1,5 @@
 import React from "react";
 import Tile from "./tile";
-import cloneBoard from "../utils/clone-board";
 import getRandomInt from "../utils/random-number";
 import getSurroundingTiles from "../utils/get-surrounding-tiles";
 
@@ -42,7 +41,7 @@ class Board extends React.Component {
   }
 
   addMine(board, tile) {
-    const newBoard = cloneBoard(board);
+    const newBoard = [...board];
     newBoard[tile].value = "M";
     return newBoard;
   }
@@ -64,7 +63,7 @@ class Board extends React.Component {
 
   revealTile(tile) {
     this.setState(prevState => {
-      const board = cloneBoard(prevState.board);
+      const board = [...prevState.board];
       board[tile].displayed = true;
       board[tile].marked = false;
       if (board[tile].value == 0) {
@@ -79,7 +78,7 @@ class Board extends React.Component {
 
   markTile(tile) {
     this.setState(prevState => {
-      const board = cloneBoard(prevState.board);
+      const board = [...prevState.board];
       board[tile].marked = !board[tile].marked;
       return {
         board

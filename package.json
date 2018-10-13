@@ -8,6 +8,18 @@
     "start": "parcel build index.html && node src/index.js",
     "build": "parcel build index.html"
   },
+  "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/minesweeper/**",
+      "**/src/**",
+      "**/utils/**"
+    ],
+    "moduleNameMapper": {
+      "\\.(png|svg|css|less|sass|scss)$": "<rootDir>/__mocks__/fileMock.js"
+    }
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

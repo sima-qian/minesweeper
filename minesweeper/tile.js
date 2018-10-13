@@ -14,13 +14,11 @@ class Tile extends React.Component {
     return e => {
       e.preventDefault();
       if (e.type === "click") {
-        // if left click
         if (this.props.value === "M") this.props.parentBoard.endGame(false);
         else if (this.props.parentBoard.state.revealedTiles < 381)
           this.props.parentBoard.revealTile(this.props.id);
         else this.props.parentBoard.endGame(true);
       } else if (e.type === "contextmenu") {
-        // if right click
         this.props.parentBoard.markTile(this.props.id);
       }
     };
