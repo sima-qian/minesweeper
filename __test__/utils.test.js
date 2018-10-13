@@ -2,6 +2,7 @@
 import addMine from "../utils/add-mine";
 import getRandomInt from "../utils/random-number";
 import getSurroundingTiles from "../utils/get-surrounding-tiles";
+import markTile from "../utils/mark-tile";
 
 describe("Testing addMine()", () => {
   const board = [];
@@ -16,11 +17,13 @@ describe("Testing addMine()", () => {
   test("addMine() should return populated array", () => {
     expect(addMine(board, tileId).length).toBeGreaterThan(0);
   });
-  test("addMine() should return array with mine at given tile", () => {
-    expect(addMine(board, tileId)[tileId].value).toBe("M");
-  });
   test("addMine() should not alter original array", () => {
     expect(addMine(board, tileId)[tileId].value).not.toBe(board[tileId].value);
+  });
+  test("addMine() should return array with mine at given tile", () => {
+    expect(addMine(board, tileId)[tileId].value).toBe("M");
+    expect(addMine(board, tileId)[tileId].displayed).toBeFalsy();
+    expect(addMine(board, tileId)[tileId].marked).toBeFalsy();
   });
   test("addMine() should not alter value of any other tile", () => {
     for (let i = 1; i < 100; i++) {
@@ -33,6 +36,7 @@ describe("Testing addMine()", () => {
       expect(addMine(board, tileId)[i].marked).toBeFalsy();
     }
   });
+  // should not alter other properties of chosen tile
 });
 
 describe("Testing getRandomInt()", () => {
@@ -80,5 +84,48 @@ describe("Testing getSurroundingTiles()", () => {
     expect(getSurroundingTiles(rightEdgeTileId, boardWidth)).toEqual(
       surroundingTileRightEdge
     );
+  });
+});
+
+describe("Testing markTile()", () => {
+  const tileId = 0;
+  const prevState = {
+    board: []
+  };
+  for (let i = 0; i < 100; i++) {
+    prevState.board.push({ value: 0, displayed: false, marked: false });
+  }
+
+  test("markTile() should return object", () => {
+    expect(markTile(tileId, prevState)).toBeInstanceOf(Object);
+  });
+  test("markTile() should return object with board property", () => {
+    expect(Object.keys(markTile(tileId, prevState)).length).toBe(1);
+    expect(markTile(tileId, prevState).board).toBeTruthy();
+  });
+  test("markTile() should not alter original board", () => {
+    expect(markTile(tileId, prevState).board[tileId.marked]).not.toBe(
+      prevState.board[tileId].marked
+    );
+  });
+
+  test("markTile() should return board with correct tile marked", () => {
+    expect(markTile(tileId, prevState).board[tileId].marked).toBeTruthy();
+    expect(markTile(tileId, prevState).board[tileId].value).toBe(0);
+    expect(markTile(tileId, prevState).board[tileId].displayed).toBeFalsy();
+  });
+
+  test("markTile() should not change marked property any other tiles", () => {
+    for (let i = 1; i < 100; i++) {
+      expect(markTile(tileId, prevState).board[i].marked).toBe(
+        prevState.board[i].marked
+      );
+    }
+  });
+  test("markTile() should not alter properties of any other tile", () => {
+    for (let i = 1; i < 100; i++) {
+      expect(markTile(tileId, prevState).board[i].displayed).toBeFalsy();
+      expect(markTile(tileId, prevState).board[i].value).toBe(0);
+    }
   });
 });

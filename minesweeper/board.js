@@ -4,6 +4,7 @@ import cloneBoard from "../utils/clone-board";
 import addMine from "../utils/add-mine";
 import getRandomInt from "../utils/random-number";
 import getSurroundingTiles from "../utils/get-surrounding-tiles";
+import markTile from "../utils/mark-tile";
 
 class Board extends React.Component {
   state = {
@@ -73,13 +74,7 @@ class Board extends React.Component {
   }
 
   markTile(tile) {
-    this.setState(prevState => {
-      const board = cloneBoard(prevState.board);
-      board[tile].marked = !board[tile].marked;
-      return {
-        board
-      };
-    });
+    this.setState(prevState => markTile(tile, prevState));
   }
 
   endGame(win) {
