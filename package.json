@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watch",
+    "test": "jest",
+    "test-watch": "jest --watch",
     "start": "parcel build index.html && node src/index.js",
     "build": "parcel build index.html"
   },
