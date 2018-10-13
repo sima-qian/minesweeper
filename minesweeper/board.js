@@ -1,5 +1,7 @@
 import React from "react";
 import Tile from "./tile";
+import cloneBoard from "../utils/clone-board";
+import addMine from "../utils/add-mine";
 import getRandomInt from "../utils/random-number";
 import getSurroundingTiles from "../utils/get-surrounding-tiles";
 
@@ -26,7 +28,7 @@ class Board extends React.Component {
       let tile = getRandomInt(width * height);
       if (board[tile].value !== "M") {
         mines++;
-        board = this.addMine(board, tile);
+        board = addMine(board, tile);
         const surroundingTiles = getSurroundingTiles(tile, width);
         surroundingTiles.forEach(tile => {
           if (tile > 0 && tile < width * height) {
@@ -38,12 +40,6 @@ class Board extends React.Component {
       }
     }
     return board;
-  }
-
-  addMine(board, tile) {
-    const newBoard = [...board];
-    newBoard[tile].value = "M";
-    return newBoard;
   }
 
   revealZeroNeighbours(board, tile) {
@@ -63,7 +59,7 @@ class Board extends React.Component {
 
   revealTile(tile) {
     this.setState(prevState => {
-      const board = [...prevState.board];
+      const board = cloneBoard(prevState.board);
       board[tile].displayed = true;
       board[tile].marked = false;
       if (board[tile].value == 0) {
@@ -78,7 +74,7 @@ class Board extends React.Component {
 
   markTile(tile) {
     this.setState(prevState => {
-      const board = [...prevState.board];
+      const board = cloneBoard(prevState.board);
       board[tile].marked = !board[tile].marked;
       return {
         board
