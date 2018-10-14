@@ -17,7 +17,7 @@ class Board extends React.Component {
   revealZeroNeighbours(board, tile) {
     const surroundingTiles = getSurroundingTiles(tile, this.state.boardWidth);
     surroundingTiles.forEach(tile => {
-      if (tile > 0 && tile < this.state.boardWidth * this.state.boardHeight) {
+      if (tile >= 0 && tile < this.state.boardWidth * this.state.boardHeight) {
         if (!board[tile].displayed) {
           board[tile].displayed = true;
           board[tile].marked = false;
