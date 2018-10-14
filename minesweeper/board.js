@@ -1,10 +1,8 @@
 import React from "react";
 import Tile from "./tile";
 import cloneBoard from "../utils/clone-board";
-// import addMine from "../utils/add-mine";
-// import getRandomInt from "../utils/random-number";
+import createBoard from "../utils/create-board";
 import getSurroundingTiles from "../utils/get-surrounding-tiles";
-import initialiseBoard from "../utils/initialise-board";
 import markTile from "../utils/mark-tile";
 
 class Board extends React.Component {
@@ -12,17 +10,9 @@ class Board extends React.Component {
     boardWidth: 30,
     boardHeight: 16,
     difficulty: null,
-    board: this.createBoard(30, 16),
+    board: createBoard(30, 16, 99),
     revealedTiles: 0
   };
-
-  createBoard(width, height) {
-    let board = [];
-    for (let i = 0; i < width * height; i++) {
-      board.push({ value: 0, displayed: false, marked: false });
-    }
-    return initialiseBoard(board, width, height, 99);
-  }
 
   revealZeroNeighbours(board, tile) {
     const surroundingTiles = getSurroundingTiles(tile, this.state.boardWidth);
